@@ -1,7 +1,6 @@
 ﻿
-namespace PanCardView.Behaviors
+namespace PanCardView.Behaviors;
+
+public sealed class ProtectedControlBehavior : Behavior<View>
 {
-    public sealed class ProtectedControlBehavior : Behavior<View>
-    {
-    }
 }

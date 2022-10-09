@@ -1,10 +1,9 @@
-﻿namespace PanCardView.Enums
+﻿namespace PanCardView.Enums;
+
+public enum UserInteractionStatus
 {
-    public enum UserInteractionStatus
-    {
-        Started,
-        Running,
-        Ending,
-        Ended
-    }
+    Started,
+    Running,
+    Ending,
+    Ended
 }

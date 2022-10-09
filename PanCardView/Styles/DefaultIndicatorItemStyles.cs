@@ -1,15 +1,15 @@
-﻿namespace PanCardView.Styles
+﻿namespace PanCardView.Styles;
+
+public static class DefaultIndicatorItemStyles
 {
-    public static class DefaultIndicatorItemStyles
+    private static Style _defaultSelectedIndicatorItemStyle;
+    private static Style _defaultUnselectedIndicatorItemStyle;
+
+    static DefaultIndicatorItemStyles()
     {
-        private static Style _defaultSelectedIndicatorItemStyle;
-        private static Style _defaultUnselectedIndicatorItemStyle;
+    }
 
-        static DefaultIndicatorItemStyles()
-        {
-        }
-
-        public static Style DefaultSelectedIndicatorItemStyle
+    public static Style DefaultSelectedIndicatorItemStyle
         => _defaultSelectedIndicatorItemStyle ??= new Style(typeof(Frame))
         {
             Setters = {
@@ -17,7 +17,7 @@
             }
         };
 
-        public static Style DefaultUnselectedIndicatorItemStyle
+    public static Style DefaultUnselectedIndicatorItemStyle
         => _defaultUnselectedIndicatorItemStyle ??= new Style(typeof(Frame))
         {
             Setters = {
@@ -25,5 +25,4 @@
                 new Setter { Property = Frame.BorderColorProperty, Value = Colors.White.MultiplyAlpha(.8f) }
             }
         };
-    }
 }

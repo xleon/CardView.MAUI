@@ -1,9 +1,8 @@
-﻿namespace PanCardView.Enums
+﻿namespace PanCardView.Enums;
+
+[Flags]
+public enum InteractionState
 {
-    [Flags]
-    public enum InteractionState
-    {
-        Regular = 1,
-        Removing = 2
-    }
+    Regular = 1,
+    Removing = 2
 }

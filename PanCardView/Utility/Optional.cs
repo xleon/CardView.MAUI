@@ -1,11 +1,10 @@
 ﻿
-namespace PanCardView.Utility
-{
-    public sealed class Optional<TValue> where TValue : class
-    {
-        public Optional(TValue value)
-            => Value = value;
+namespace PanCardView.Utility;
 
-        public TValue Value { get; }
-    }
+public sealed class Optional<TValue> where TValue : class
+{
+    public Optional(TValue value)
+        => Value = value;
+
+    public TValue Value { get; }
 }

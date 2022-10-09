@@ -1,8 +1,7 @@
 ﻿
-namespace PanCardView.Utility
+namespace PanCardView.Utility;
+
+public interface IAnimationsChecker
 {
-    public interface IAnimationsChecker
-    {
-        bool AreAnimationsEnabled { get; }
-    }
+    bool AreAnimationsEnabled { get; }
 }

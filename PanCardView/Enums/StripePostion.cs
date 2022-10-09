@@ -1,8 +1,7 @@
-﻿namespace PanCardView.Enums
+﻿namespace PanCardView.Enums;
+
+public enum StripePosition
 {
-    public enum StripePosition
-    {
-        Bottom,
-        Top
-    }
+    Bottom,
+    Top
 }

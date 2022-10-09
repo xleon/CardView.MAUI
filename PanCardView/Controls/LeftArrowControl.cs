@@ -1,21 +1,20 @@
 ﻿using System.ComponentModel;
 using static PanCardView.Resources.ResourcesInfo;
 
-namespace PanCardView.Controls
+namespace PanCardView.Controls;
+
+public class LeftArrowControl : ArrowControl
 {
-    public class LeftArrowControl : ArrowControl
+    public LeftArrowControl()
     {
-        public LeftArrowControl()
-        {
-            IsRight = false;
-            AbsoluteLayout.SetLayoutBounds(this, new Rect(0, .5, -1, -1));
-        }
+        IsRight = false;
+        AbsoluteLayout.SetLayoutBounds(this, new Rect(0, .5, -1, -1));
+    }
 
-        protected override ImageSource DefaultImageSource => WhiteLeftArrowImageSource;
+    protected override ImageSource DefaultImageSource => WhiteLeftArrowImageSource;
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public new static void Preserve()
-        {
-        }
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new static void Preserve()
+    {
     }
 }
