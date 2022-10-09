@@ -26,7 +26,7 @@ public class CubeProcessor : CarouselProcessor
             var margin = value - Sign(value) * cardsView.GetSize(view) * 0.5 * (1 - view.Scale);
             var rotation = value * Angle90 / cardsView.GetSize();
 
-            if (Device.RuntimePlatform == Device.Android)
+            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
                 var anchor = .5 * (1 - Sin(rotation * PI / Angle180));
                 if (cardsView.IsHorizontalOrientation)

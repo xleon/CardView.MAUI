@@ -101,7 +101,7 @@ public class CardsProcessor : IProcessor
                         return;
                     }
                     view.Scale = v;
-                }, view.Scale, 1).Commit(view, Path.GetRandomFileName(), 16, AnimationLength, AnimationEasing));
+                }, view.Scale).Commit(view, Path.GetRandomFileName(), 16, AnimationLength, AnimationEasing));
                 continue;
             }
 

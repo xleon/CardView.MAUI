@@ -12,54 +12,54 @@ namespace PanCardView.Controls;
 
 public class TabsControl : AbsoluteLayout
 {
-    public static readonly BindableProperty DiffProperty = BindableProperty.Create(nameof(Diff), typeof(double), typeof(TabsControl), 0.0, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty DiffProperty = BindableProperty.Create(nameof(Diff), typeof(double), typeof(TabsControl), 0.0, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().UpdateStripePosition();
     });
 
-    public static readonly BindableProperty MaxDiffProperty = BindableProperty.Create(nameof(MaxDiff), typeof(double), typeof(TabsControl), 0.0, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty MaxDiffProperty = BindableProperty.Create(nameof(MaxDiff), typeof(double), typeof(TabsControl), 0.0, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().UpdateStripePosition();
     });
 
     public static readonly BindableProperty ItemsCountProperty = BindableProperty.Create(nameof(ItemsCount), typeof(int), typeof(TabsControl), -1);
 
-    public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(TabsControl), 0, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(TabsControl), 0, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().OnSelectedIndexChanged();
     });
 
-    public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(TabsControl), null, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(TabsControl), null, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().ResetItemsLayout();
     });
 
-    public static readonly BindableProperty StripeColorProperty = BindableProperty.Create(nameof(StripeColor), typeof(Color), typeof(TabsControl), Colors.CadetBlue, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty StripeColorProperty = BindableProperty.Create(nameof(StripeColor), typeof(Color), typeof(TabsControl), Colors.CadetBlue, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().ResetStripeView();
     });
 
-    public static readonly BindableProperty StripeHeightProperty = BindableProperty.Create(nameof(StripeHeight), typeof(double), typeof(TabsControl), 3.0, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty StripeHeightProperty = BindableProperty.Create(nameof(StripeHeight), typeof(double), typeof(TabsControl), 3.0, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().ResetStripeView();
     });
 
-    public static readonly BindableProperty IsCyclicalProperty = BindableProperty.Create(nameof(IsCyclical), typeof(bool), typeof(TabsControl), false, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsCyclicalProperty = BindableProperty.Create(nameof(IsCyclical), typeof(bool), typeof(TabsControl), false, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().ResetItemsLayout();
     });
 
-    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(TabsControl), null, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(TabsControl), null, propertyChanged: (bindable, oldValue, _) =>
     {
         bindable.AsTabsView().ResetItemsSource(oldValue as IEnumerable);
     });
 
-    public static readonly BindableProperty IsUserInteractionRunningProperty = BindableProperty.Create(nameof(IsUserInteractionRunning), typeof(bool), typeof(TabsControl), true, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsUserInteractionRunningProperty = BindableProperty.Create(nameof(IsUserInteractionRunning), typeof(bool), typeof(TabsControl), true, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().ResetVisibility();
     });
 
-    public static readonly BindableProperty IsAutoInteractionRunningProperty = BindableProperty.Create(nameof(IsAutoInteractionRunning), typeof(bool), typeof(TabsControl), true, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsAutoInteractionRunningProperty = BindableProperty.Create(nameof(IsAutoInteractionRunning), typeof(bool), typeof(TabsControl), true, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().ResetVisibility();
     });
@@ -68,7 +68,7 @@ public class TabsControl : AbsoluteLayout
 
     public static readonly BindableProperty UseParentAsBindingContextProperty = BindableProperty.Create(nameof(UseParentAsBindingContext), typeof(bool), typeof(TabsControl), true);
 
-    public static readonly BindableProperty StripePositionProperty = BindableProperty.Create(nameof(StripePosition), typeof(StripePosition), typeof(TabsControl), StripePosition.Bottom, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty StripePositionProperty = BindableProperty.Create(nameof(StripePosition), typeof(StripePosition), typeof(TabsControl), StripePosition.Bottom, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsTabsView().ResetItemsLayout();
     });
@@ -106,15 +106,15 @@ public class TabsControl : AbsoluteLayout
         Behaviors.Add(new ProtectedControlBehavior());
     }
 
-    private StackLayout ItemsStackLayout { get; } = new StackLayout
+    private StackLayout ItemsStackLayout { get; } = new()
     {
         Spacing = 0,
         Orientation = StackOrientation.Horizontal
     };
 
-    private BoxView MainStripeView { get; set; } = new BoxView();
+    private BoxView MainStripeView { get; set; } = new();
 
-    private BoxView AdditionalStripeView { get; set; } = new BoxView();
+    private BoxView AdditionalStripeView { get; set; } = new();
 
     public double Diff
     {
@@ -229,7 +229,7 @@ public class TabsControl : AbsoluteLayout
         {
             IsVisible = true;
 
-            await new AnimationWrapper(v => Opacity = v, Opacity, 1)
+            await new AnimationWrapper(v => Opacity = v, Opacity)
                 .Commit(this, nameof(ResetVisibility), 16, appearingTime ?? 330, appearingEasing ?? Easing.CubicInOut);
             return;
         }

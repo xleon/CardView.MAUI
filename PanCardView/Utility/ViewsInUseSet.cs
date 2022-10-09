@@ -6,7 +6,7 @@ public sealed class ViewsInUseSet
 {
     public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-    private readonly Dictionary<View, int> _viewsSet = new Dictionary<View, int>();
+    private readonly Dictionary<View, int> _viewsSet = new();
 
     public IReadOnlyList<View> Views => _viewsSet.Keys?.ToList();
 

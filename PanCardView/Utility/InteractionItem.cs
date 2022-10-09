@@ -4,8 +4,8 @@ namespace PanCardView.Utility;
 
 public sealed class InteractionItem
 {
-    private static readonly object _itemsPoolLocker = new object();
-    private static readonly Stack<InteractionItem> _itemsPool = new Stack<InteractionItem>();
+    private static readonly object _itemsPoolLocker = new();
+    private static readonly Stack<InteractionItem> _itemsPool = new();
 
     public static InteractionItem GetItem(Guid id, InteractionType type, InteractionState state)
     {

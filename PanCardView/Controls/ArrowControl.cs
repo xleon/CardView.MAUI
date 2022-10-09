@@ -8,37 +8,37 @@ namespace PanCardView.Controls;
 
 public class ArrowControl : ContentView
 {
-    public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(ArrowControl), 0, BindingMode.TwoWay, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(ArrowControl), 0, BindingMode.TwoWay, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsArrowControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty ItemsCountProperty = BindableProperty.Create(nameof(ItemsCount), typeof(int), typeof(ArrowControl), 0, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty ItemsCountProperty = BindableProperty.Create(nameof(ItemsCount), typeof(int), typeof(ArrowControl), 0, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsArrowControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty IsCyclicalProperty = BindableProperty.Create(nameof(IsCyclical), typeof(bool), typeof(ArrowControl), false, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsCyclicalProperty = BindableProperty.Create(nameof(IsCyclical), typeof(bool), typeof(ArrowControl), false, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsArrowControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty IsUserInteractionRunningProperty = BindableProperty.Create(nameof(IsUserInteractionRunning), typeof(bool), typeof(ArrowControl), true, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsUserInteractionRunningProperty = BindableProperty.Create(nameof(IsUserInteractionRunning), typeof(bool), typeof(ArrowControl), true, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsArrowControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty IsAutoInteractionRunningProperty = BindableProperty.Create(nameof(IsAutoInteractionRunning), typeof(bool), typeof(ArrowControl), true, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsAutoInteractionRunningProperty = BindableProperty.Create(nameof(IsAutoInteractionRunning), typeof(bool), typeof(ArrowControl), true, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsArrowControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty IsRightToLeftFlowDirectionEnabledProperty = BindableProperty.Create(nameof(IsRightToLeftFlowDirectionEnabled), typeof(bool), typeof(ArrowControl), false, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsRightToLeftFlowDirectionEnabledProperty = BindableProperty.Create(nameof(IsRightToLeftFlowDirectionEnabled), typeof(bool), typeof(ArrowControl), false, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsArrowControl().OnIsRightToLeftFlowDirectionEnabledChnaged();
     });
 
-    public static readonly BindableProperty ImageSourceProperty = BindableProperty.Create(nameof(ImageSource), typeof(ImageSource), typeof(ArrowControl), defaultValueCreator: b => b.AsArrowControl().DefaultImageSource, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty ImageSourceProperty = BindableProperty.Create(nameof(ImageSource), typeof(ImageSource), typeof(ArrowControl), defaultValueCreator: b => b.AsArrowControl().DefaultImageSource, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsArrowControl().OnImageSourceChanged();
     });
@@ -182,7 +182,7 @@ public class ArrowControl : ContentView
         {
             IsVisible = true;
 
-            await new AnimationWrapper(v => Opacity = v, Opacity, 1)
+            await new AnimationWrapper(v => Opacity = v, Opacity)
                 .Commit(this, nameof(ResetVisibility), 16, appearingTime ?? 330, appearingEasing ?? Easing.CubicInOut);
             return;
         }
@@ -191,7 +191,7 @@ public class ArrowControl : ContentView
         {
             IsVisible = true;
 
-            await new AnimationWrapper(v => Opacity = v, Opacity, 1)
+            await new AnimationWrapper(v => Opacity = v, Opacity)
                 .Commit(this, nameof(ResetVisibility), 16, appearingTime ?? 330, appearingEasing ?? Easing.CubicInOut);
             return;
         }

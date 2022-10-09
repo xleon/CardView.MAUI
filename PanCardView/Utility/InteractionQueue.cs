@@ -4,8 +4,8 @@ namespace PanCardView.Utility;
 
 public sealed class InteractionQueue
 {
-    private readonly List<InteractionItem> _queue = new List<InteractionItem>();
-    private readonly object _queueLocker = new object();
+    private readonly List<InteractionItem> _queue = new();
+    private readonly object _queueLocker = new();
 
     public InteractionItem GetFirstItem(InteractionType type = InteractionType.User | InteractionType.Auto, InteractionState state = InteractionState.Regular | InteractionState.Removing)
     {

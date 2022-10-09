@@ -12,12 +12,16 @@ using PanCardView.EventArgs;
 using PanCardView.Delegates;
 using System.ComponentModel;
 using Microsoft.Maui.Layouts;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable EventNeverSubscribedTo.Global
+// ReSharper disable PossibleMultipleEnumeration
+// ReSharper disable InconsistentlySynchronizedField
 
 namespace PanCardView;
 
 public class CardsView : AbsoluteLayout
 {
-    public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(CardsView), -1, BindingMode.TwoWay, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(CardsView), -1, BindingMode.TwoWay, propertyChanged: (bindable, oldValue, _) =>
     {
         var view = bindable.AsCardsView();
         view.SetSelectedItem();
@@ -30,48 +34,48 @@ public class CardsView : AbsoluteLayout
         view.ForceRedrawViews();
     });
 
-    public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(CardsView), null, BindingMode.TwoWay, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty SelectedItemProperty = BindableProperty.Create(nameof(SelectedItem), typeof(object), typeof(CardsView), null, BindingMode.TwoWay, propertyChanged: (bindable, _, newValue) =>
     {
         var view = bindable.AsCardsView();
         view.SelectedIndex = view.ItemsSource?.FindIndex(newValue) ?? -1;
     });
 
-    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(CardsView), null, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(CardsView), null, propertyChanged: (bindable, oldValue, _) =>
     {
         bindable.AsCardsView().SetItemsSource(oldValue as IEnumerable);
     });
 
-    public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(CardsView), propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(CardsView), propertyChanged: (bindable, _, _) =>
     {
         bindable.AsCardsView().ForceRedrawViews();
     });
 
-    public static readonly BindableProperty BackViewsDepthProperty = BindableProperty.Create(nameof(BackViewsDepth), typeof(int), typeof(CardsView), defaultValueCreator: b => b.AsCardsView().DefaultBackViewsDepth, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty BackViewsDepthProperty = BindableProperty.Create(nameof(BackViewsDepth), typeof(int), typeof(CardsView), defaultValueCreator: b => b.AsCardsView().DefaultBackViewsDepth, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsCardsView().ForceRedrawViews();
     });
 
-    public static readonly BindableProperty IsRightToLeftFlowDirectionEnabledProperty = BindableProperty.Create(nameof(IsRightToLeftFlowDirectionEnabled), typeof(bool), typeof(CardsView), false, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsRightToLeftFlowDirectionEnabledProperty = BindableProperty.Create(nameof(IsRightToLeftFlowDirectionEnabled), typeof(bool), typeof(CardsView), false, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsCardsView().ForceRedrawViews();
     });
 
-    public static readonly BindableProperty SlideShowDurationProperty = BindableProperty.Create(nameof(SlideShowDuration), typeof(int), typeof(CardsView), 0, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty SlideShowDurationProperty = BindableProperty.Create(nameof(SlideShowDuration), typeof(int), typeof(CardsView), 0, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsCardsView().AdjustSlideShow();
     });
 
-    public static readonly BindableProperty IsUserInteractionRunningProperty = BindableProperty.Create(nameof(IsUserInteractionRunning), typeof(bool), typeof(CardsView), false, BindingMode.OneWayToSource, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsUserInteractionRunningProperty = BindableProperty.Create(nameof(IsUserInteractionRunning), typeof(bool), typeof(CardsView), false, BindingMode.OneWayToSource, propertyChanged: (bindable, _, newValue) =>
     {
         bindable.AsCardsView().AdjustSlideShow((bool)newValue);
     });
 
-    public static readonly BindableProperty IsAutoInteractionRunningProperty = BindableProperty.Create(nameof(IsAutoInteractionRunning), typeof(bool), typeof(CardsView), false, BindingMode.OneWayToSource, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsAutoInteractionRunningProperty = BindableProperty.Create(nameof(IsAutoInteractionRunning), typeof(bool), typeof(CardsView), false, BindingMode.OneWayToSource, propertyChanged: (bindable, _, newValue) =>
     {
         bindable.AsCardsView().AdjustSlideShow((bool)newValue);
     });
 
-    public static readonly BindableProperty IsPanInteractionEnabledProperty = BindableProperty.Create(nameof(IsPanInteractionEnabled), typeof(bool), typeof(CardsView), true, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsPanInteractionEnabledProperty = BindableProperty.Create(nameof(IsPanInteractionEnabled), typeof(bool), typeof(CardsView), true, propertyChanged: (bindable, _, newValue) =>
     {
         bindable.AsCardsView().SetPanGesture(!(bool)newValue);
     });
@@ -124,19 +128,19 @@ public class CardsView : AbsoluteLayout
 
     public static readonly BindableProperty OppositePanDirectionDisablingThresholdProperty = BindableProperty.Create(nameof(OppositePanDirectionDisablingThreshold), typeof(double), typeof(CardsView), double.PositiveInfinity);
 
-    public static readonly BindableProperty SwipeThresholdTimeProperty = BindableProperty.Create(nameof(SwipeThresholdTime), typeof(TimeSpan), typeof(CardsView), TimeSpan.FromMilliseconds(Device.RuntimePlatform == Device.Android ? 100 : 60));
+    public static readonly BindableProperty SwipeThresholdTimeProperty = BindableProperty.Create(nameof(SwipeThresholdTime), typeof(TimeSpan), typeof(CardsView), TimeSpan.FromMilliseconds(DeviceInfo.Current.Platform == DevicePlatform.Android ? 100 : 60));
 
-    public static readonly BindableProperty UserInteractedCommandProperty = BindableProperty.Create(nameof(UserInteractedCommand), typeof(ICommand), typeof(CardsView), null);
+    public static readonly BindableProperty UserInteractedCommandProperty = BindableProperty.Create(nameof(UserInteractedCommand), typeof(ICommand), typeof(CardsView));
 
-    public static readonly BindableProperty ItemDisappearingCommandProperty = BindableProperty.Create(nameof(ItemDisappearingCommand), typeof(ICommand), typeof(CardsView), null);
+    public static readonly BindableProperty ItemDisappearingCommandProperty = BindableProperty.Create(nameof(ItemDisappearingCommand), typeof(ICommand), typeof(CardsView));
 
-    public static readonly BindableProperty ItemAppearingCommandProperty = BindableProperty.Create(nameof(ItemAppearingCommand), typeof(ICommand), typeof(CardsView), null);
+    public static readonly BindableProperty ItemAppearingCommandProperty = BindableProperty.Create(nameof(ItemAppearingCommand), typeof(ICommand), typeof(CardsView));
 
-    public static readonly BindableProperty ItemAppearedCommandProperty = BindableProperty.Create(nameof(ItemAppearedCommand), typeof(ICommand), typeof(CardsView), null);
+    public static readonly BindableProperty ItemAppearedCommandProperty = BindableProperty.Create(nameof(ItemAppearedCommand), typeof(ICommand), typeof(CardsView));
 
-    public static readonly BindableProperty ItemSwipedCommandProperty = BindableProperty.Create(nameof(ItemSwipedCommand), typeof(ICommand), typeof(CardsView), null);
+    public static readonly BindableProperty ItemSwipedCommandProperty = BindableProperty.Create(nameof(ItemSwipedCommand), typeof(ICommand), typeof(CardsView));
 
-    internal static readonly BindableProperty ShouldAutoNavigateToNextProperty = BindableProperty.Create(nameof(ShouldAutoNavigateToNext), typeof(bool?), typeof(CardsView), null);
+    internal static readonly BindableProperty ShouldAutoNavigateToNextProperty = BindableProperty.Create(nameof(ShouldAutoNavigateToNext), typeof(bool?), typeof(CardsView));
 
     internal static readonly BindableProperty ProcessorDiffProperty = BindableProperty.Create(nameof(ProcessorDiff), typeof(double), typeof(CardsView), 0.0, BindingMode.OneWayToSource);
 
@@ -180,18 +184,18 @@ public class CardsView : AbsoluteLayout
     [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler<bool> AccessibilityChangeRequested;
 
-    private readonly object _childrenLocker = new object();
-    private readonly object _viewsInUseLocker = new object();
-    private readonly object _setCurrentViewLocker = new object();
-    private readonly object _sizeChangedLocker = new object();
+    private readonly object _childrenLocker = new();
+    private readonly object _viewsInUseLocker = new();
+    private readonly object _setCurrentViewLocker = new();
+    private readonly object _sizeChangedLocker = new();
 
-    private readonly Dictionary<object, HashSet<View>> _viewsPool = new Dictionary<object, HashSet<View>>();
-    private readonly Dictionary<Guid, IEnumerable<View>> _viewsGestureCounter = new Dictionary<Guid, IEnumerable<View>>();
-    private readonly List<TimeDiffItem> _timeDiffItems = new List<TimeDiffItem>();
-    private readonly ViewsInUseSet _viewsInUseSet = new ViewsInUseSet();
-    private readonly InteractionQueue _interactions = new InteractionQueue();
-    private readonly PanGestureRecognizer _panGesture = new PanGestureRecognizer();
-    private readonly ContextAssignedBehavior _contextAssignedBehavior = new ContextAssignedBehavior();
+    private readonly Dictionary<object, HashSet<View>> _viewsPool = new();
+    private readonly Dictionary<Guid, IEnumerable<View>> _viewsGestureCounter = new();
+    private readonly List<TimeDiffItem> _timeDiffItems = new();
+    private readonly ViewsInUseSet _viewsInUseSet = new();
+    private readonly InteractionQueue _interactions = new();
+    private readonly PanGestureRecognizer _panGesture = new();
+    private readonly ContextAssignedBehavior _contextAssignedBehavior = new();
 
     private View _currentView;
     private IEnumerable<View> _prevViews = Enumerable.Empty<View>();
@@ -571,7 +575,7 @@ public class CardsView : AbsoluteLayout
         set => SetValue(ProcessorDiffProperty, value);
     }
 
-    public object this[int index] => ItemsSource?.FindValue(index);
+    public new object this[int index] => ItemsSource?.FindValue(index);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static void Preserve()
@@ -630,7 +634,7 @@ public class CardsView : AbsoluteLayout
                 return;
             case GestureStatus.Canceled:
             case GestureStatus.Completed:
-                if (Device.RuntimePlatform == Device.Android)
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
                     OnTouchChanged(diff, oppositeDirectionDiff, true);
                     SetParentTouchHandlerIfNeeded(statusType);
@@ -662,10 +666,10 @@ public class CardsView : AbsoluteLayout
 
             var isLeftSwiped = swipeDirection == ItemSwipeDirection.Left;
             var haveItems = (isLeftSwiped && NextViews.Any()) || (!isLeftSwiped && PrevViews.Any());
-            var isAndroid = Device.RuntimePlatform == Device.Android;
+            var isAndroid = DeviceInfo.Current.Platform == DevicePlatform.Android;
 
             var parentCardsViewOption = new Optional<CardsView>(FindParentElement<CardsView>());
-            if (!haveItems && parentCardsViewOption?.Value != null)
+            if (!haveItems && parentCardsViewOption.Value != null)
             {
                 if (!isAndroid || !IsPanSwipeEnabled)
                 {
@@ -802,6 +806,7 @@ public class CardsView : AbsoluteLayout
         if (CurrentView != null && ItemTemplate != null)
         {
             var currentViewPair = _viewsPool.FirstOrDefault(p => p.Value.Contains(CurrentView));
+            // ReSharper disable once SuspiciousTypeConversion.Global
             if (!currentViewPair.Equals(default(KeyValuePair<object, List<View>>)))
             {
                 currentViewPair.Value.Clear();
@@ -814,8 +819,8 @@ public class CardsView : AbsoluteLayout
         ForceRedrawViews();
         RemoveUnprocessingChildren();
             
-        LayoutChildren(X, Y, Width, Height);
-        ForceLayout();
+        // LayoutChildren(X, Y, Width, Height); // TODO how is this done in MAUI?
+        // ForceLayout(); // TODO how is this done in MAUI?
     }
 
     protected virtual void SetupBackViews(int? index = null)
@@ -905,7 +910,6 @@ public class CardsView : AbsoluteLayout
             realDirection = (AnimationDirection)Sign(-(int)realDirection);
         }
 
-        var oldView = CurrentView;
         SetupBackViews(OldIndex);
         ResetActiveInactiveBackViews(realDirection);
         var newView = InitViews(false, realDirection, Enumerable.Empty<View>(), SelectedIndex).FirstOrDefault();
@@ -919,12 +923,12 @@ public class CardsView : AbsoluteLayout
 
         var animationId = Guid.NewGuid();
         StartAutoNavigation(views, animationId, animationDirection);
-        PerformUWPFrontViewProcessorHandlePanChanged(Size * Sign((int)realDirection), realDirection);
+        PerformUwpFrontViewProcessorHandlePanChanged(Size * Sign((int)realDirection), realDirection);
         await Task.Delay(5);
         _currentBackAnimationDirection = realDirection;
 
         await InvokeOnMainThreadIfNeededAsync(() => Processor.Navigate(this, GetAnimationProcessorItems()));
-        PerformUWPFrontViewProcessorHandlePanChanged(0, realDirection);
+        PerformUwpFrontViewProcessorHandlePanChanged(0, realDirection);
         EndAutoNavigation(views, animationId, animationDirection);
         return true;
     }
@@ -1018,7 +1022,7 @@ public class CardsView : AbsoluteLayout
     private IEnumerable<View> SetupNextView(int index, IEnumerable<View> bookedViews)
     {
         var indices = new int[BackViewsDepth];
-        for (int i = 0; i < indices.Length; ++i)
+        for (var i = 0; i < indices.Length; ++i)
         {
             indices[i] = index + 1 + i;
         }
@@ -1029,12 +1033,12 @@ public class CardsView : AbsoluteLayout
         return bookedViews.Union(NextViews);
     }
 
-    private IEnumerable<View> SetupPrevView(int index, IEnumerable<View> bookedViews)
+    private void SetupPrevView(int index, IEnumerable<View> bookedViews)
     {
         var isForwardOnly = IsOnlyForwardDirection;
 
         var indices = new int[BackViewsDepth];
-        for (int i = 0; i < indices.Length; ++i)
+        for (var i = 0; i < indices.Length; ++i)
         {
             var incValue = i + 1;
             if (!isForwardOnly)
@@ -1047,7 +1051,6 @@ public class CardsView : AbsoluteLayout
         PrevViews = (IsPrevItemPanInteractionEnabled && !isForwardOnly) || (IsNextItemPanInteractionEnabled && isForwardOnly)
             ? InitViews(false, AnimationDirection.Prev, bookedViews, indices)
             : Enumerable.Empty<View>();
-        return bookedViews.Union(PrevViews);
     }
 
     private void StoreParentSize(double width, double height)
@@ -1161,7 +1164,7 @@ public class CardsView : AbsoluteLayout
         _interactions.Add(gestureId, InteractionType.User);
 
         FireUserInteracted(UserInteractionStatus.Started, CurrentDiff, SelectedIndex);
-        if (Device.RuntimePlatform != Device.Android)
+        if (DeviceInfo.Current.Platform != DevicePlatform.Android)
         {
             IsUserInteractionRunning = true;
         }
@@ -1546,7 +1549,7 @@ public class CardsView : AbsoluteLayout
         try
         {
             BatchBegin();
-            for (int i = 0; i < indices.Length; ++i)
+            for (var i = 0; i < indices.Length; ++i)
             {
                 var view = PrepareView(bookedViews, indices[i]);
                 views[i] = view;
@@ -1612,7 +1615,7 @@ public class CardsView : AbsoluteLayout
 
     private View CreateRetrieveView(object context, DataTemplate template, IEnumerable<View> bookedViews)
     {
-        if (!_viewsPool.TryGetValue(template, out HashSet<View> viewsCollection))
+        if (!_viewsPool.TryGetValue(template, out var viewsCollection))
         {
             viewsCollection = new HashSet<View>();
             _viewsPool.Add(template, viewsCollection);
@@ -1716,7 +1719,7 @@ public class CardsView : AbsoluteLayout
 
         if (currentIndex < backIndex)
         {
-            ExecutePreventException(() => LowerChild(view));
+            // ExecutePreventException(() => LowerChild(view)); // TODO how should we do this in MAUI?
         }
     }
 
@@ -1726,7 +1729,7 @@ public class CardsView : AbsoluteLayout
         {
             lock (_childrenLocker)
             {
-                var views = Children.Where(c => !CheckIsProtectedView(c) && !CheckIsProcessingView(c)).ToArray();
+                var views = Children.OfType<View>().Where(c => !CheckIsProtectedView(c) && !CheckIsProcessingView(c)).ToArray();
                 foreach (var view in views)
                 {
                     CleanView(view);
@@ -1865,7 +1868,7 @@ public class CardsView : AbsoluteLayout
                     return;
                 }
 
-                var views = Children.Where(c => !CheckIsProtectedView(c) && !CheckIsProcessingView(c) && !_viewsInUseSet.Contains(c));
+                var views = Children.OfType<View>().Where(c => !CheckIsProtectedView(c) && !CheckIsProcessingView(c) && !_viewsInUseSet.Contains(c));
                 if (IsViewReusingEnabled)
                 {
                     views = views.Take(_viewsChildrenCount - DesiredMaxChildrenCount);
@@ -1881,7 +1884,7 @@ public class CardsView : AbsoluteLayout
         {
             lock (_childrenLocker)
             {
-                var views = Children.Where(c => !CheckIsProtectedView(c) && !CheckIsProcessingView(c)).ToArray();
+                var views = Children.OfType<View>().Where(c => !CheckIsProtectedView(c) && !CheckIsProcessingView(c)).ToArray();
                 RemoveChildren(views);
             }
         });
@@ -1905,14 +1908,14 @@ public class CardsView : AbsoluteLayout
     private ProcessorItem[] GetAnimationProcessorItems()
         => new ProcessorItem[]
         {
-            new ProcessorItem
+            new()
             {
                 IsFront = true,
                 Views = Enumerable.Repeat(CurrentView, 1),
                 Direction = _currentBackAnimationDirection,
                 InactiveViews = Enumerable.Empty<View>()
             },
-            new ProcessorItem
+            new()
             {
                 Views = CurrentBackViews,
                 Direction = _currentBackAnimationDirection,
@@ -1920,20 +1923,20 @@ public class CardsView : AbsoluteLayout
             }
         };
 
-    private void InvokeOnMainThreadIfNeeded(Action action)
+    private static void InvokeOnMainThreadIfNeeded(Action action)
     {
-        if (!Device.IsInvokeRequired)
+        if (MainThread.IsMainThread)
         {
             action.Invoke();
             return;
         }
-        Device.BeginInvokeOnMainThread(action);
+        MainThread.BeginInvokeOnMainThread(action);
     }
 
-    private Task InvokeOnMainThreadIfNeededAsync(Func<Task> action)
-        => !Device.IsInvokeRequired
+    private static Task InvokeOnMainThreadIfNeededAsync(Func<Task> action)
+        => MainThread.IsMainThread
             ? action.Invoke()
-            : Device.InvokeOnMainThreadAsync(action);
+            : MainThread.InvokeOnMainThreadAsync(action);
 
     private void ExecutePreventException(Action action)
     {
@@ -1943,12 +1946,13 @@ public class CardsView : AbsoluteLayout
         }
         catch
         {
-            Device.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 try
                 {
                     action?.Invoke();
                 }
+                // ReSharper disable once EmptyGeneralCatchClause
                 catch
                 {
 #if NETSTANDARD2_0
@@ -1960,9 +1964,9 @@ public class CardsView : AbsoluteLayout
     }
 
     //https://github.com/AndreiMisiukevich/CardView/issues/335
-    private void PerformUWPFrontViewProcessorHandlePanChanged(double value, AnimationDirection direction)
+    private void PerformUwpFrontViewProcessorHandlePanChanged(double value, AnimationDirection direction)
     {
-        if (Device.RuntimePlatform != Device.UWP)
+        if (DeviceInfo.Current.Platform != DevicePlatform.WinUI)  // TODO do we still need this for WinUI ?
         {
             return;
         }
@@ -2024,7 +2028,7 @@ public class CardsView : AbsoluteLayout
         }
     }
 
-    private void DisposeCancellationTokenSource(ref CancellationTokenSource tokenSource)
+    private static void DisposeCancellationTokenSource(ref CancellationTokenSource tokenSource)
     {
         tokenSource?.Cancel();
         tokenSource?.Dispose();

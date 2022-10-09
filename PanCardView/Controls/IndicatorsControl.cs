@@ -11,44 +11,44 @@ namespace PanCardView.Controls;
 
 public class IndicatorsControl : StackLayout
 {
-    public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(IndicatorsControl), 0, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create(nameof(SelectedIndex), typeof(int), typeof(IndicatorsControl), 0, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsIndicatorsControl().ResetIndicatorsStyles();
     });
 
     public static readonly BindableProperty ItemsCountProperty = BindableProperty.Create(nameof(ItemsCount), typeof(int), typeof(IndicatorsControl), -1);
 
-    public static readonly BindableProperty SelectedIndicatorStyleProperty = BindableProperty.Create(nameof(SelectedIndicatorStyle), typeof(Style), typeof(IndicatorsControl), DefaultSelectedIndicatorItemStyle, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty SelectedIndicatorStyleProperty = BindableProperty.Create(nameof(SelectedIndicatorStyle), typeof(Style), typeof(IndicatorsControl), DefaultSelectedIndicatorItemStyle, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsIndicatorsControl().ResetIndicatorsStyles();
     });
 
-    public static readonly BindableProperty UnselectedIndicatorStyleProperty = BindableProperty.Create(nameof(UnselectedIndicatorStyle), typeof(Style), typeof(IndicatorsControl), DefaultUnselectedIndicatorItemStyle, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty UnselectedIndicatorStyleProperty = BindableProperty.Create(nameof(UnselectedIndicatorStyle), typeof(Style), typeof(IndicatorsControl), DefaultUnselectedIndicatorItemStyle, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsIndicatorsControl().ResetIndicatorsStyles();
     });
 
-    public static readonly BindableProperty IsUserInteractionRunningProperty = BindableProperty.Create(nameof(IsUserInteractionRunning), typeof(bool), typeof(IndicatorsControl), true, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsUserInteractionRunningProperty = BindableProperty.Create(nameof(IsUserInteractionRunning), typeof(bool), typeof(IndicatorsControl), true, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsIndicatorsControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty IsAutoInteractionRunningProperty = BindableProperty.Create(nameof(IsAutoInteractionRunning), typeof(bool), typeof(IndicatorsControl), true, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty IsAutoInteractionRunningProperty = BindableProperty.Create(nameof(IsAutoInteractionRunning), typeof(bool), typeof(IndicatorsControl), true, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsIndicatorsControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty HidesForSingleIndicatorProperty = BindableProperty.Create(nameof(HidesForSingleIndicator), typeof(bool), typeof(IndicatorsControl), true, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty HidesForSingleIndicatorProperty = BindableProperty.Create(nameof(HidesForSingleIndicator), typeof(bool), typeof(IndicatorsControl), true, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsIndicatorsControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty MaximumVisibleIndicatorsCountProperty = BindableProperty.Create(nameof(MaximumVisibleIndicatorsCount), typeof(int), typeof(IndicatorsControl), int.MaxValue, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty MaximumVisibleIndicatorsCountProperty = BindableProperty.Create(nameof(MaximumVisibleIndicatorsCount), typeof(int), typeof(IndicatorsControl), int.MaxValue, propertyChanged: (bindable, _, _) =>
     {
         bindable.AsIndicatorsControl().ResetVisibility();
     });
 
-    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(IndicatorsControl), null, propertyChanged: (bindable, oldValue, newValue) =>
+    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(IndicatorsControl), null, propertyChanged: (bindable, oldValue, _) =>
     {
         bindable.AsIndicatorsControl().ResetItemsSource(oldValue as IEnumerable);
     });
@@ -162,7 +162,7 @@ public class IndicatorsControl : StackLayout
         set => SetValue(ToFadeDurationProperty, value);
     }
 
-    public object this[int index] => ItemsSource?.FindValue(index);
+    public new object this[int index] => ItemsSource?.FindValue(index);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static void Preserve()
@@ -217,7 +217,7 @@ public class IndicatorsControl : StackLayout
         {
             IsVisible = true;
 
-            await new AnimationWrapper(v => Opacity = v, Opacity, 1)
+            await new AnimationWrapper(v => Opacity = v, Opacity)
                 .Commit(this, nameof(ResetVisibility), 16, appearingTime ?? 330, appearingEasing ?? Easing.CubicInOut);
             return;
         }

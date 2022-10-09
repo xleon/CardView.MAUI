@@ -38,7 +38,7 @@ public sealed class AnimationWrapper : IEnumerable
         if (DependencyService.Get<IAnimationsChecker>()?.AreAnimationsEnabled ?? true)
         {
             var tcs = new TaskCompletionSource<bool>();
-            PrepareAnimation(this).Commit(view, name, rate, length, easing, (d, b) => tcs.SetResult(true));
+            PrepareAnimation(this).Commit(view, name, rate, length, easing, (_, _) => tcs.SetResult(true));
             return tcs.Task;
         }
 

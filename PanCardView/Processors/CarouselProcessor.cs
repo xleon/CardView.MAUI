@@ -24,9 +24,9 @@ public class CarouselProcessor : IProcessor
 
     public double RotationYFactor { get; set; } = 0;
 
-    private readonly object _viewSizeChangedMapLocker = new object();
+    private readonly object _viewSizeChangedMapLocker = new();
 
-    private readonly Dictionary<View, ViewSizeInfoItem> _viewSizeChangedMap = new Dictionary<View, ViewSizeInfoItem>();
+    private readonly Dictionary<View, ViewSizeInfoItem> _viewSizeChangedMap = new();
 
     public virtual void Init(CardsView cardsView, params ProcessorItem[] items)
     {
