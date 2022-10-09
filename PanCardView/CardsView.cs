@@ -3,20 +3,15 @@ using PanCardView.Enums;
 using PanCardView.Extensions;
 using PanCardView.Processors;
 using PanCardView.Utility;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Forms;
 using static System.Math;
-using System.Threading;
 using System.Runtime.CompilerServices;
 using PanCardView.EventArgs;
 using PanCardView.Delegates;
 using System.ComponentModel;
+using Microsoft.Maui.Layouts;
 
 namespace PanCardView
 {
@@ -145,7 +140,7 @@ namespace PanCardView
 
         internal static readonly BindableProperty ProcessorDiffProperty = BindableProperty.Create(nameof(ProcessorDiff), typeof(double), typeof(CardsView), 0.0, BindingMode.OneWayToSource);
 
-        [Xamarin.Forms.TypeConverter(typeof(ReferenceTypeConverter))]
+        [TypeConverter(typeof(ReferenceTypeConverter))]
         public IndicatorView IndicatorView
         {
             set
@@ -769,7 +764,7 @@ namespace PanCardView
             DisposeCancellationTokenSource(ref _hardSetTokenSource);
             _hardSetTokenSource = new CancellationTokenSource();
             var token = _hardSetTokenSource.Token;
-            ViewExtensions.CancelAnimations(this);
+            this.CancelAnimations();
 
             await Task.Delay(5);
             if (token.IsCancellationRequested)
@@ -818,6 +813,7 @@ namespace PanCardView
             await Task.Delay(1);// Workaround for https://github.com/AndreiMisiukevich/CardView/issues/194
             ForceRedrawViews();
             RemoveUnprocessingChildren();
+            
             LayoutChildren(X, Y, Width, Height);
             ForceLayout();
         }
@@ -831,9 +827,7 @@ namespace PanCardView
 
             if (IsRightToLeftFlowDirectionEnabled)
             {
-                var nextViews = NextViews;
-                NextViews = PrevViews;
-                PrevViews = nextViews;
+                (NextViews, PrevViews) = (PrevViews, NextViews);
             }
         }
 
@@ -841,8 +835,8 @@ namespace PanCardView
         {
             foreach (var view in views.Where(v => v != null))
             {
-                SetLayoutBounds(view, new Rectangle(0, 0, 1, 1));
-                SetLayoutFlags(view, AbsoluteLayoutFlags.All);
+                AbsoluteLayout.SetLayoutBounds(view, new Rect(0, 0, 1, 1));
+                AbsoluteLayout.SetLayoutFlags(view, AbsoluteLayoutFlags.All);
             }
         }
 
@@ -1061,7 +1055,7 @@ namespace PanCardView
 
         private void SetPanGesture(bool isForceRemoving = false)
         {
-            if (Device.RuntimePlatform != Device.Android)
+            if (DeviceInfo.Current.Platform != DevicePlatform.Android)
             {
                 _panGesture.PanUpdated -= OnPanUpdated;
                 GestureRecognizers.Remove(_panGesture);
@@ -1071,38 +1065,6 @@ namespace PanCardView
                 }
                 _panGesture.PanUpdated += OnPanUpdated;
                 GestureRecognizers.Add(_panGesture);
-            }
-
-            if (Device.RuntimePlatform == Device.GTK)
-            {
-                var lastTapTime = DateTime.MinValue;
-                const int delay = 200;
-                CancellationTokenSource tapCts = null;
-
-                GestureRecognizers.Clear();
-                GestureRecognizers.Add(new TapGestureRecognizer
-                {
-                    Command = new Command(async () =>
-                    {
-                        var now = DateTime.UtcNow;
-                        if (Abs((now - lastTapTime).TotalMilliseconds) < delay)
-                        {
-                            DisposeCancellationTokenSource(ref tapCts);
-                            lastTapTime = DateTime.MinValue;
-                            SelectedIndex = (SelectedIndex.ToCyclicalIndex(ItemsCount) - 1).ToCyclicalIndex(ItemsCount);
-                            return;
-                        }
-                        lastTapTime = now;
-                        tapCts = new CancellationTokenSource();
-                        var token = tapCts.Token;
-                        await Task.Delay(delay);
-                        if (!token.IsCancellationRequested)
-                        {
-                            SelectedIndex = (SelectedIndex.ToCyclicalIndex(ItemsCount) + 1).ToCyclicalIndex(ItemsCount);
-                            return;
-                        }
-                    })
-                });
             }
         }
 

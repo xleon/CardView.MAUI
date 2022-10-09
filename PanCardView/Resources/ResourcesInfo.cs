@@ -1,5 +1,4 @@
-﻿using Xamarin.Forms;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace PanCardView.Resources
 {

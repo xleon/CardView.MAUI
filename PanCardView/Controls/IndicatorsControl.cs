@@ -1,14 +1,11 @@
 ﻿using PanCardView.Behaviors;
 using PanCardView.Extensions;
 using System.Collections;
-using System.Linq;
-using Xamarin.Forms;
-using static PanCardView.Controls.Styles.DefaultIndicatorItemStyles;
-using System.Threading.Tasks;
-using System.Threading;
+using static PanCardView.Styles.DefaultIndicatorItemStyles;
 using PanCardView.Utility;
 using System.ComponentModel;
 using System.Collections.Specialized;
+using Microsoft.Maui.Layouts;
 
 namespace PanCardView.Controls
 {
@@ -81,7 +78,7 @@ namespace PanCardView.Controls
             this.SetBinding(IsAutoInteractionRunningProperty, nameof(CardsView.IsAutoInteractionRunning));
 
             Margin = new Thickness(10, 20);
-            AbsoluteLayout.SetLayoutBounds(this, new Rectangle(.5, 1, -1, -1));
+            AbsoluteLayout.SetLayoutBounds(this, new Rect(.5, 1, -1, -1));
             AbsoluteLayout.SetLayoutFlags(this, AbsoluteLayoutFlags.PositionProportional);
 
             Behaviors.Add(new ProtectedControlBehavior());
@@ -191,7 +188,7 @@ namespace PanCardView.Controls
 
         protected virtual void OnResetIndicatorsStyles(int currentIndex)
         {
-            foreach (var child in Children)
+            foreach (var child in Children.OfType<View>())
             {
                 ApplyStyle(child, currentIndex);
             }

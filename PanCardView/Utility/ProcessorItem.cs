@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using PanCardView.Enums;
-using Xamarin.Forms;
+﻿using PanCardView.Enums;
 
 namespace PanCardView.Utility
 {

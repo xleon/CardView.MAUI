@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Maui.Layouts;
 using PanCardView.Behaviors;
 using PanCardView.Enums;
 using PanCardView.Extensions;
 using PanCardView.Utility;
-using Xamarin.Forms;
 using static System.Math;
 
 namespace PanCardView.Controls
@@ -37,7 +34,7 @@ namespace PanCardView.Controls
             bindable.AsTabsView().ResetItemsLayout();
         });
 
-        public static readonly BindableProperty StripeColorProperty = BindableProperty.Create(nameof(StripeColor), typeof(Color), typeof(TabsControl), Color.CadetBlue, propertyChanged: (bindable, oldValue, newValue) =>
+        public static readonly BindableProperty StripeColorProperty = BindableProperty.Create(nameof(StripeColor), typeof(Color), typeof(TabsControl), Colors.CadetBlue, propertyChanged: (bindable, oldValue, newValue) =>
         {
             bindable.AsTabsView().ResetStripeView();
         });
@@ -84,9 +81,17 @@ namespace PanCardView.Controls
 
         public TabsControl()
         {
-            Children.Add(ItemsStackLayout, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
-            Children.Add(MainStripeView, new Rectangle(0, 1, 0, 0), AbsoluteLayoutFlags.YProportional);
-            Children.Add(AdditionalStripeView, new Rectangle(0, 1, 0, 0), AbsoluteLayoutFlags.YProportional);
+            AbsoluteLayout.SetLayoutBounds(ItemsStackLayout, new Rect(0, 0, 1, 1));
+            AbsoluteLayout.SetLayoutFlags(ItemsStackLayout, AbsoluteLayoutFlags.All);
+            Children.Add(ItemsStackLayout);
+            
+            AbsoluteLayout.SetLayoutBounds(MainStripeView, new Rect(0, 1, 0, 0));
+            AbsoluteLayout.SetLayoutFlags(MainStripeView, AbsoluteLayoutFlags.YProportional);
+            Children.Add(MainStripeView);
+            
+            AbsoluteLayout.SetLayoutBounds(AdditionalStripeView, new Rect(0, 1, 0, 0));
+            AbsoluteLayout.SetLayoutFlags(AdditionalStripeView, AbsoluteLayoutFlags.YProportional);
+            Children.Add(AdditionalStripeView);
 
             this.SetBinding(DiffProperty, nameof(CardsView.ProcessorDiff));
             this.SetBinding(MaxDiffProperty, nameof(Width));
@@ -96,8 +101,8 @@ namespace PanCardView.Controls
             this.SetBinding(IsUserInteractionRunningProperty, nameof(CardsView.IsUserInteractionRunning));
             this.SetBinding(IsAutoInteractionRunningProperty, nameof(CardsView.IsAutoInteractionRunning));
 
-            SetLayoutBounds(this, new Rectangle(.5, 1, -1, -1));
-            SetLayoutFlags(this, AbsoluteLayoutFlags.PositionProportional);
+            AbsoluteLayout.SetLayoutBounds(this, new Rect(.5, 1, -1, -1));
+            AbsoluteLayout.SetLayoutFlags(this, AbsoluteLayoutFlags.PositionProportional);
             Behaviors.Add(new ProtectedControlBehavior());
         }
 
@@ -195,7 +200,7 @@ namespace PanCardView.Controls
             set => SetValue(StripePositionProperty, value);
         }
 
-        public object this[int index] => ItemsSource?.FindValue(index);
+        public new object this[int index] => ItemsSource?.FindValue(index);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void Preserve()
@@ -407,40 +412,38 @@ namespace PanCardView.Controls
             var affectedItemView = ItemsStackLayout.Children[affectedIndex];
             if (diff <= 0)
             {
-                CalculateStripePosition(currentItemView, affectedItemView, itemProgress, selectedIndex > affectedIndex);
+                CalculateStripePosition(currentItemView as View, affectedItemView as View, itemProgress, selectedIndex > affectedIndex);
                 return;
             }
-            CalculateStripePosition(affectedItemView, currentItemView, 1 - itemProgress, selectedIndex < affectedIndex);
+            CalculateStripePosition(affectedItemView as View, currentItemView as View, 1 - itemProgress, selectedIndex < affectedIndex);
         }
 
         private void CalculateStripePosition(View firstView, View secondView, double itemProgress, bool isSecondStripeVisible)
         {
             if(itemProgress <= 0 &&
-                GetLayoutBounds(AdditionalStripeView).Width >
-                GetLayoutBounds(MainStripeView).Width)
+                GetLayoutBounds(AdditionalStripeView as IView).Width >
+                GetLayoutBounds(MainStripeView as IView).Width)
             {
                 SwapStripeViews();
             }
 
             AdditionalStripeView.IsVisible = isSecondStripeVisible;
             var additionalStripeWidth = isSecondStripeVisible ? secondView.Width * itemProgress : 0;
-            SetLayoutBounds(AdditionalStripeView, new Rectangle(secondView.X, StripePosition == StripePosition.Bottom ? 1 : 0, additionalStripeWidth, StripeHeight));
+            AbsoluteLayout.SetLayoutBounds(AdditionalStripeView, new Rect(secondView.X, StripePosition == StripePosition.Bottom ? 1 : 0, additionalStripeWidth, StripeHeight));
 
             var x = firstView.X + firstView.Width * itemProgress;
             var mainStripewidth = firstView.Width * (1 - itemProgress) + secondView.Width * itemProgress - additionalStripeWidth;
-            SetLayoutBounds(MainStripeView, new Rectangle(x, StripePosition == StripePosition.Bottom ? 1 : 0, mainStripewidth, StripeHeight));
+            AbsoluteLayout.SetLayoutBounds(MainStripeView, new Rect(x, StripePosition == StripePosition.Bottom ? 1 : 0, mainStripewidth, StripeHeight));
         }
 
         private void SwapStripeViews()
         {
-            var view = MainStripeView;
-            MainStripeView = AdditionalStripeView;
-            AdditionalStripeView = view;
+            (MainStripeView, AdditionalStripeView) = (AdditionalStripeView, MainStripeView);
         }
 
         private void OnSelectedIndexChanged()
         {
-            if(!(Parent is ScrollView scroll))
+            if(Parent is not ScrollView scroll)
             {
                 return;
             }
@@ -449,7 +452,7 @@ namespace PanCardView.Controls
             {
                 return;
             }
-            scroll.ScrollToAsync(ItemsStackLayout.Children[index], ScrollToPosition.MakeVisible, true);
+            scroll.ScrollToAsync(ItemsStackLayout.Children[index] as View, ScrollToPosition.MakeVisible, true);
         }
     }
 }

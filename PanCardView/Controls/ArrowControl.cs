@@ -1,10 +1,8 @@
-﻿using Xamarin.Forms;
-using PanCardView.Behaviors;
-using System.Threading;
+﻿using PanCardView.Behaviors;
 using PanCardView.Extensions;
-using PanCardView.Utility;
-using System.Threading.Tasks;
 using System.ComponentModel;
+using Microsoft.Maui.Layouts;
+using PanCardView.Utility;
 
 namespace PanCardView.Controls
 {

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
 using PanCardView.Extensions;
 using PanCardView.Processors;
-using Xamarin.Forms;
 using static System.Math;
 
 namespace PanCardView

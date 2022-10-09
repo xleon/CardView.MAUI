@@ -1,6 +1,4 @@
-﻿using Xamarin.Forms;
-
-namespace PanCardView.Controls.Styles
+﻿namespace PanCardView.Styles
 {
     public static class DefaultIndicatorItemStyles
     {
@@ -12,20 +10,20 @@ namespace PanCardView.Controls.Styles
         }
 
         public static Style DefaultSelectedIndicatorItemStyle
-        => _defaultSelectedIndicatorItemStyle ?? (_defaultSelectedIndicatorItemStyle = new Style(typeof(Frame))
+        => _defaultSelectedIndicatorItemStyle ??= new Style(typeof(Frame))
         {
             Setters = {
-                new Setter { Property = VisualElement.BackgroundColorProperty, Value = Color.White.MultiplyAlpha(.8) }
+                new Setter { Property = VisualElement.BackgroundColorProperty, Value = Colors.White.MultiplyAlpha(.8f) }
             }
-        });
+        };
 
         public static Style DefaultUnselectedIndicatorItemStyle
-        => _defaultUnselectedIndicatorItemStyle ?? (_defaultUnselectedIndicatorItemStyle = new Style(typeof(Frame))
+        => _defaultUnselectedIndicatorItemStyle ??= new Style(typeof(Frame))
         {
             Setters = {
-                new Setter { Property = VisualElement.BackgroundColorProperty, Value = Color.Transparent },
-                new Setter { Property = Frame.BorderColorProperty, Value = Color.White.MultiplyAlpha(.8) }
+                new Setter { Property = VisualElement.BackgroundColorProperty, Value = Colors.Transparent },
+                new Setter { Property = Frame.BorderColorProperty, Value = Colors.White.MultiplyAlpha(.8f) }
             }
-        });
+        };
     }
 }

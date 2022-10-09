@@ -1,5 +1,4 @@
 ﻿using PanCardView.Extensions;
-using Xamarin.Forms;
 using static System.Math;
 using static PanCardView.Processors.Constants;
 

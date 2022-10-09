@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using Xamarin.Forms;
 using static PanCardView.Resources.ResourcesInfo;
 
 namespace PanCardView.Controls
@@ -9,7 +8,7 @@ namespace PanCardView.Controls
         public LeftArrowControl()
         {
             IsRight = false;
-            AbsoluteLayout.SetLayoutBounds(this, new Rectangle(0, .5, -1, -1));
+            AbsoluteLayout.SetLayoutBounds(this, new Rect(0, .5, -1, -1));
         }
 
         protected override ImageSource DefaultImageSource => WhiteLeftArrowImageSource;
